@@ -1,7 +1,7 @@
 package hr.mfllipovic.github.screens.search.utils
 
 import android.util.Log
-import androidx.appcompat.widget.SearchView
+import android.widget.SearchView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.coroutineScope
 import kotlinx.coroutines.Job

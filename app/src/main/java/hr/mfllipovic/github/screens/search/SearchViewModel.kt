@@ -1,7 +1,9 @@
 package hr.mfllipovic.github.screens.search
 
 import android.util.Log
+import android.view.MenuItem
 import androidx.databinding.Observable
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -29,28 +31,36 @@ class SearchViewModel(private val repository: SearchRepository) : ViewModel() {
     }
 
     val repositories = repository.repositories
+    val sortValueText = MutableLiveData<String>()
+    val orderValueText = MutableLiveData<String>()
 
     fun onSearchQueryChanged(query: String?) {
-        if (query == null || query.isBlank()) {
-            emptySearchResults()
-        } else {
-            filter.query = query
-        }
+        filter.query = query ?: ""
     }
 
     fun onSortByChanged(sortByParam: SortByParam) {
         filter.sort = sortByParam
+        sortValueText.value = sortByParam.name
     }
 
     fun onOrderChanged(orderParam: OrderParam) {
         filter.order = orderParam
+        orderValueText.value = orderParam.name
     }
 
     fun emptySearchResults() {
-        // TODO empty search list and show empty list field
+        // TODO show empty view
     }
 
     fun search(filter: SearchFilter) {
+        if (filter.query.isNotBlank()) {
+            fetchRepositories(filter)
+        } else {
+            emptySearchResults()
+        }
+    }
+
+    private fun fetchRepositories(filter: SearchFilter) {
         viewModelScope.launch {
             try {
                 repository.searchRepositories(filter)
