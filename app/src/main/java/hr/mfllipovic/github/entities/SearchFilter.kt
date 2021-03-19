@@ -1,5 +1,9 @@
 package hr.mfllipovic.github.entities
 
+import androidx.databinding.BaseObservable
+import androidx.databinding.Bindable
+import hr.mfllipovic.github.BR
+
 enum class SortByParam {
     none,
     stars,
@@ -13,7 +17,27 @@ enum class OrderParam {
     desc
 }
 
-data class SearchFilter(val query: String, val sort: SortByParam, val order: OrderParam) {
+class SearchFilter : BaseObservable() {
+    @get:Bindable
+    var query: String = ""
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.query)
+        }
+
+    @get:Bindable
+    var sort: SortByParam = SortByParam.none
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.sort)
+        }
+
+    @get:Bindable
+    var order: OrderParam = OrderParam.none
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.order)
+        }
 
     fun toMap(): Map<String, String> {
         val map = mutableMapOf(

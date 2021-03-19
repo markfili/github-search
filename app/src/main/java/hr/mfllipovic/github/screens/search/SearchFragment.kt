@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import hr.mfllipovic.github.databinding.SearchFragmentBinding
 import hr.mfllipovic.github.network.getNetworkService
 import hr.mfllipovic.github.screens.search.results.SearchResultsListAdapter
+import hr.mfllipovic.github.screens.search.utils.OnSearchQueryChange
+import hr.mfllipovic.github.screens.search.utils.SearchQueryChangeListener
 
 class SearchFragment : Fragment() {
 
@@ -44,5 +46,11 @@ class SearchFragment : Fragment() {
                 searchResultsListAdapter.submitList(it)
             }
         }
+        _binding.searchField.setOnQueryTextListener(SearchQueryChangeListener(lifecycle, object :
+            OnSearchQueryChange {
+            override fun onChange(query: String?) {
+                mViewModel.onSearchQueryChanged(query)
+            }
+        }))
     }
 }
