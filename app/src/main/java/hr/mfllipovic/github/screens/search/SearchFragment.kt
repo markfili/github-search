@@ -101,9 +101,14 @@ class SearchFragment : Fragment() {
         val viewModelFactory = SearchViewModel.SearchViewModelFactory(gitHubRepository);
         val viewModel: SearchViewModel by viewModels { viewModelFactory }
         mViewModel = viewModel.apply {
-            repositories.observe(viewLifecycleOwner) {
+            results.observe(viewLifecycleOwner) {
                 it?.let {
-                    searchResultsListAdapter.submitList(it)
+                    searchResultsListAdapter.submitList(
+                        it.items
+                    ) {
+                        _binding.searchResults = it
+                        setupEmptyListVisibility(false)
+                    }
                 }
             }
             sortValueText.observe(viewLifecycleOwner) {
@@ -118,6 +123,22 @@ class SearchFragment : Fragment() {
                     requireActivity().invalidateOptionsMenu()
                 }
             }
+            emptyListReceived.observe(viewLifecycleOwner) {
+                it?.let { listEmpty ->
+                    if (listEmpty) {
+                        searchResultsListAdapter.submitList(listOf()) {
+                            setupEmptyListVisibility(listEmpty)
+                        }
+                    }
+                }
+            }
         }
+    }
+
+    private fun setupEmptyListVisibility(listEmpty: Boolean) {
+        _binding.searchResultsInfoView.visibility = if (listEmpty) View.GONE else View.VISIBLE
+        _binding.searchResultsList.visibility = if (listEmpty) View.GONE else View.VISIBLE
+        _binding.searchResultsEmptyView.visibility = if (!listEmpty) View.GONE else View.VISIBLE
+
     }
 }

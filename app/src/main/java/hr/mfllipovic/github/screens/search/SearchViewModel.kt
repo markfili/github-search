@@ -1,13 +1,11 @@
 package hr.mfllipovic.github.screens.search
 
 import android.util.Log
-import android.view.MenuItem
 import androidx.databinding.Observable
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import hr.mfllipovic.github.BR
 import hr.mfllipovic.github.entities.OrderParam
 import hr.mfllipovic.github.entities.SearchFilter
 import hr.mfllipovic.github.entities.SortByParam
@@ -30,9 +28,13 @@ class SearchViewModel(private val repository: SearchRepository) : ViewModel() {
         }
     }
 
-    val repositories = repository.repositories
+    val results = repository.results
     val sortValueText = MutableLiveData<String>()
     val orderValueText = MutableLiveData<String>()
+
+    private val _emptyListReceived = MutableLiveData<Boolean>()
+    val emptyListReceived
+        get() = _emptyListReceived
 
     fun onSearchQueryChanged(query: String?) {
         filter.query = query ?: ""
@@ -48,15 +50,12 @@ class SearchViewModel(private val repository: SearchRepository) : ViewModel() {
         orderValueText.value = orderParam.name
     }
 
-    fun emptySearchResults() {
-        // TODO show empty view
-    }
-
     fun search(filter: SearchFilter) {
         if (filter.query.isNotBlank()) {
             fetchRepositories(filter)
+            _emptyListReceived.value = false
         } else {
-            emptySearchResults()
+            _emptyListReceived.value = true
         }
     }
 
