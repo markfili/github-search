@@ -47,4 +47,8 @@ class SearchFilter : BaseObservable() {
         if (order != OrderParam.none) map["order"] = order.name
         return map
     }
+
+    override fun toString(): String {
+        return "SearchFilter [ query $query, sort ${sort.name}, order ${order.name} ]"
+    }
 }
