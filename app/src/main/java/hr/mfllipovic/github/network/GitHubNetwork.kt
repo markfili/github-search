@@ -12,7 +12,7 @@ private const val baseUrl = "https://api.github.com/"
 
 private val service: GitHubNetwork by lazy {
     val okHttpClient = OkHttpClient.Builder()
-        .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+        .addInterceptor(HttpLoggingInterceptor())
         .build()
 
     val retrofit = Retrofit.Builder()

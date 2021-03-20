@@ -3,7 +3,7 @@ package hr.mfllipovic.github.screens.search
 import android.os.Bundle
 import android.view.*
 import android.widget.ImageView
-import android.widget.SearchView
+import androidx.appcompat.widget.SearchView
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -64,6 +64,11 @@ class SearchFragment : Fragment() {
         inflater.inflate(R.menu.search_repositories, menu)
         val searchItem = menu.findItem(R.id.app_bar_search)
         val searchView = searchItem.actionView as SearchView
+        if (mViewModel.lastQuery.isNotBlank()) {
+            searchItem.expandActionView()
+            searchView.setQuery(mViewModel.lastQuery, false)
+            searchView.clearFocus()
+        }
         searchView.setOnQueryTextListener(SearchQueryChangeListener(lifecycle, object :
             OnSearchQueryChange {
             override fun onChange(query: String?) {

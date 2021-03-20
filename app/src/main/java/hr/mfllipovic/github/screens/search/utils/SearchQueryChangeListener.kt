@@ -1,7 +1,7 @@
 package hr.mfllipovic.github.screens.search.utils
 
 import android.util.Log
-import android.widget.SearchView
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.coroutineScope
 import kotlinx.coroutines.Job
@@ -21,10 +21,9 @@ class SearchQueryChangeListener(
     }
 
     override fun onQueryTextChange(newText: String?): Boolean {
-        Log.i("SearchFragment", "Query changed: $newText")
         searchJob?.cancel()
         searchJob = lifecycle.coroutineScope.launch {
-            delay(400)
+            delay(1000)
             listener.onChange(newText)
         }
         return false
