@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="repository"
             type="hr.mfllipovic.github.entities.Repository" />
@@ -10,14 +12,70 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:minHeight="120dp"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/repository_owner_avatar"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:networkCircularImgSrc="@{repository.owner.avatarUrl}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/repository_name"
-            android:layout_width="match_parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/repository_full_name"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{repository.name}" />
+            android:text="@{repository.fullName}"
+            app:layout_constraintStart_toEndOf="@+id/repository_owner_avatar"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="sfikter/flop-lop" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:divider="@drawable/repository_info_divider"
+            android:orientation="horizontal"
+            android:showDividers="middle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/repository_owner_avatar">
+
+            <TextView
+                android:id="@+id/repository_stargazers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{`Stars\n` + repository.stargazersCount}"
+                android:textAlignment="center"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/repository_watchers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{`watchers\n` + repository.watchersCount}"
+                android:textColor="@color/black"
+                tools:text="stars\n234" />
+
+            <TextView
+                android:id="@+id/repository_forks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{`forks\n` + repository.forksCount}"
+                android:textColor="@color/black"
+                tools:text="stars\n234" />
+
+            <TextView
+                android:id="@+id/repository_issues"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{`openIssues\n` + repository.openIssuesCount}"
+                android:textColor="@color/black"
+                tools:text="stars\n234" />
+        </LinearLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
