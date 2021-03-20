@@ -12,9 +12,9 @@ import hr.mfllipovic.github.R
 import hr.mfllipovic.github.databinding.SearchResultItemBinding
 import hr.mfllipovic.github.entities.Repository
 
-class SearchResultsListAdapter :
+class SearchResultsListAdapter(private val onRepositoryClickListener: OnRepositoryClickListener) :
     ListAdapter<Repository, SearchResultsListAdapter.SearchResultViewHolder>(
-        SearchResultsDiffUtilCallback()
+        SearchResultsDiffUtilCallback(),
     ) {
 
     inner class SearchResultViewHolder(var binding: SearchResultItemBinding) :
@@ -32,7 +32,9 @@ class SearchResultsListAdapter :
     }
 
     override fun onBindViewHolder(holder: SearchResultViewHolder, position: Int) {
-        holder.binding.repository = getItem(position)
+        val repository = getItem(position)
+        holder.binding.repository = repository
+        holder.binding.root.setOnClickListener { onRepositoryClickListener.onClick(repository) }
     }
 
     companion object {
@@ -50,3 +52,6 @@ class SearchResultsListAdapter :
     }
 }
 
+interface OnRepositoryClickListener {
+    fun onClick(repository: Repository)
+}

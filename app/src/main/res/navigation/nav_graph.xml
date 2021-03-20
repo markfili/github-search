@@ -9,6 +9,23 @@
         android:id="@+id/search_fragment"
         android:name="hr.mfllipovic.github.screens.search.SearchFragment"
         android:label="@string/search_title"
-        tools:layout="@layout/search_fragment" />
+        tools:layout="@layout/search_fragment">
+        <action
+            android:id="@+id/action_search_fragment_to_details_fragment"
+            app:destination="@id/details_fragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/details_fragment"
+        android:name="hr.mfllipovic.github.screens.details.DetailsFragment"
+        android:label="details_fragment"
+        tools:layout="@layout/fragment_details">
+        <argument
+            android:name="repository"
+            app:argType="hr.mfllipovic.github.entities.Repository" />
+    </fragment>
 
 </navigation>

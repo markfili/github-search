@@ -5,12 +5,15 @@ import android.view.*
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import hr.mfllipovic.github.R
 import hr.mfllipovic.github.databinding.SearchFragmentBinding
 import hr.mfllipovic.github.entities.OrderParam
+import hr.mfllipovic.github.entities.Repository
 import hr.mfllipovic.github.entities.SortByParam
 import hr.mfllipovic.github.network.getNetworkService
+import hr.mfllipovic.github.screens.search.results.OnRepositoryClickListener
 import hr.mfllipovic.github.screens.search.results.SearchResultsListAdapter
 import hr.mfllipovic.github.screens.search.utils.OnSearchQueryChange
 import hr.mfllipovic.github.screens.search.utils.SearchQueryChangeListener
@@ -19,7 +22,13 @@ class SearchFragment : Fragment() {
 
     private lateinit var _binding: SearchFragmentBinding
     private val searchResultsListAdapter: SearchResultsListAdapter =
-        SearchResultsListAdapter()
+        SearchResultsListAdapter(object : OnRepositoryClickListener {
+            override fun onClick(repository: Repository) {
+                val bundle = Bundle()
+                bundle.putParcelable("repository", repository)
+                findNavController().navigate(R.id.action_search_fragment_to_details_fragment, bundle)
+            }
+        })
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,8 +106,8 @@ class SearchFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val gitHubNetwork = getNetworkService()
-        val gitHubRepository = SearchRepository(gitHubNetwork);
-        val viewModelFactory = SearchViewModel.SearchViewModelFactory(gitHubRepository);
+        val gitHubRepository = SearchRepository(gitHubNetwork)
+        val viewModelFactory = SearchViewModel.SearchViewModelFactory(gitHubRepository)
         val viewModel: SearchViewModel by viewModels { viewModelFactory }
         mViewModel = viewModel.apply {
             results.observe(viewLifecycleOwner) {
