@@ -2,9 +2,12 @@ package hr.mfllipovic.github.screens.search
 
 import android.os.Bundle
 import android.view.*
+import android.widget.ImageView
 import android.widget.SearchView
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import hr.mfllipovic.github.R
@@ -23,10 +26,16 @@ class SearchFragment : Fragment() {
     private lateinit var _binding: SearchFragmentBinding
     private val searchResultsListAdapter: SearchResultsListAdapter =
         SearchResultsListAdapter(object : OnRepositoryClickListener {
-            override fun onClick(repository: Repository) {
+            override fun onClick(repository: Repository, imageView: ImageView) {
                 val bundle = Bundle()
                 bundle.putParcelable("repository", repository)
-                findNavController().navigate(R.id.action_search_fragment_to_details_fragment, bundle)
+                val extras = FragmentNavigatorExtras(imageView to "owner_avatar_hero")
+                findNavController().navigate(
+                    R.id.action_search_fragment_to_details_fragment,
+                    bundle,
+                    null,
+                    extras
+                )
             }
         })
 
@@ -111,12 +120,16 @@ class SearchFragment : Fragment() {
         val viewModel: SearchViewModel by viewModels { viewModelFactory }
         mViewModel = viewModel.apply {
             results.observe(viewLifecycleOwner) {
+                postponeEnterTransition()
                 it?.let {
                     searchResultsListAdapter.submitList(
                         it.items
                     ) {
                         _binding.searchResults = it
                         setupEmptyListVisibility(false)
+                        (view?.parent as? ViewGroup)?.doOnPreDraw {
+                            startPostponedEnterTransition()
+                        }
                     }
                 }
             }

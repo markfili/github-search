@@ -3,6 +3,7 @@ package hr.mfllipovic.github.screens.search.results
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.view.ViewCompat
 import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -34,7 +35,12 @@ class SearchResultsListAdapter(private val onRepositoryClickListener: OnReposito
     override fun onBindViewHolder(holder: SearchResultViewHolder, position: Int) {
         val repository = getItem(position)
         holder.binding.repository = repository
-        holder.binding.root.setOnClickListener { onRepositoryClickListener.onClick(repository) }
+        holder.binding.root.setOnClickListener {
+            onRepositoryClickListener.onClick(
+                repository,
+                holder.binding.repositoryOwnerAvatar
+            )
+        }
     }
 
     companion object {
@@ -53,5 +59,5 @@ class SearchResultsListAdapter(private val onRepositoryClickListener: OnReposito
 }
 
 interface OnRepositoryClickListener {
-    fun onClick(repository: Repository)
+    fun onClick(repository: Repository, imageView: ImageView)
 }

@@ -1,6 +1,7 @@
 package hr.mfllipovic.github.screens.details
 
 import android.os.Bundle
+import android.transition.TransitionInflater
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +20,8 @@ class DetailsFragment : Fragment() {
         arguments?.let {
             repository = it.get("repository") as Repository
         }
+        sharedElementEnterTransition = TransitionInflater.from(requireContext())
+            .inflateTransition(R.transition.shared_image)
     }
 
     override fun onCreateView(
@@ -30,8 +33,9 @@ class DetailsFragment : Fragment() {
         return _binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         _binding.repository = repository
+        _binding.executePendingBindings()
     }
 }
