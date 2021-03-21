@@ -16,15 +16,15 @@ import hr.mfllipovic.github.databinding.SearchFragmentBinding
 import hr.mfllipovic.github.entities.Repository
 import hr.mfllipovic.github.network.getNetworkService
 import hr.mfllipovic.github.screens.search.results.OnRepositoryClickListener
-import hr.mfllipovic.github.screens.search.results.SearchResultsListAdapter
+import hr.mfllipovic.github.screens.search.results.SearchResultsEpoxyController
 import hr.mfllipovic.github.screens.search.utils.OnSearchQueryChange
 import hr.mfllipovic.github.screens.search.utils.SearchQueryChangeListener
 
 class SearchFragment : Fragment() {
 
+    private val searchResultsListController =
+        SearchResultsEpoxyController(onRepositoryClickListener())
     private lateinit var _binding: SearchFragmentBinding
-    private val searchResultsListAdapter: SearchResultsListAdapter =
-        SearchResultsListAdapter(onRepositoryClickListener())
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,7 +42,7 @@ class SearchFragment : Fragment() {
             searchView.setOnQueryTextListener(searchQueryChangeListener())
             searchView.setMenuItem(toolbar.menu.findItem(R.id.action_search))
             searchResultsList.layoutManager = LinearLayoutManager(context)
-            searchResultsList.adapter = searchResultsListAdapter
+            searchResultsList.setController(searchResultsListController)
         }
     }
 
@@ -57,34 +57,14 @@ class SearchFragment : Fragment() {
             results.observe(viewLifecycleOwner) {
                 postponeEnterTransition()
                 it?.let {
-                    searchResultsListAdapter.submitList(
-                        it.items
-                    ) {
-                        _binding.searchResults = it
-                        setupEmptyListVisibility(false)
-                        (view?.parent as? ViewGroup)?.doOnPreDraw {
-                            startPostponedEnterTransition()
-                        }
-                    }
-                }
-            }
-            emptyListReceived.observe(viewLifecycleOwner) {
-                it?.let { listEmpty ->
-                    if (listEmpty) {
-                        searchResultsListAdapter.submitList(listOf()) {
-                            setupEmptyListVisibility(listEmpty)
-                        }
+                    searchResultsListController.setData(it.items)
+                    _binding.searchResults = it
+                    (view?.parent as? ViewGroup)?.doOnPreDraw {
+                        startPostponedEnterTransition()
                     }
                 }
             }
         }
-    }
-
-    private fun setupEmptyListVisibility(listEmpty: Boolean) {
-        _binding.searchResultsInfoView.visibility = if (listEmpty) View.GONE else View.VISIBLE
-        _binding.searchResultsList.visibility = if (listEmpty) View.GONE else View.VISIBLE
-        _binding.searchResultsEmptyView.visibility = if (!listEmpty) View.GONE else View.VISIBLE
-
     }
 
     private fun searchQueryChangeListener() = SearchQueryChangeListener(
@@ -96,7 +76,7 @@ class SearchFragment : Fragment() {
         })
 
     private fun onRepositoryClickListener() = object : OnRepositoryClickListener {
-        override fun onClick(repository: Repository, imageView: ImageView) {
+        override fun onRepositoryClick(imageView: ImageView, repository: Repository) {
             val bundle = Bundle()
             bundle.putParcelable("repository", repository)
             val extras = FragmentNavigatorExtras(imageView to "owner_avatar_hero")

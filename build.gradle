@@ -18,6 +18,7 @@ buildscript {
     ext.espresso_core_version = "3.3.0"
     ext.glide_version = "4.12.0"
     ext.search_view_version = "1.4.0"
+    ext.epoxy_version = "4.4.3"
     repositories {
         google()
         jcenter()

@@ -23,7 +23,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/toolbar_container"
             tools:visibility="visible">
 
@@ -40,13 +39,14 @@
                 android:text='@{searchResults.items.size() + " out of " + searchResults.totalCount}' />
         </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
+        <com.airbnb.epoxy.EpoxyRecyclerView
             android:id="@+id/search_results_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/search_results_info_view" />
+            app:layout_constraintTop_toBottomOf="@id/search_results_info_view"
+            tools:itemCount="5"
+            tools:listitem="@layout/search_result_item" />
 
         <TextView
             android:id="@+id/search_results_empty_view"

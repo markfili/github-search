@@ -2,7 +2,10 @@ package hr.mfllipovic.github.screens.search
 
 import android.util.Log
 import androidx.databinding.Observable
-import androidx.lifecycle.*
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import hr.mfllipovic.github.entities.OrderParam
 import hr.mfllipovic.github.entities.SearchFilter
 import hr.mfllipovic.github.entities.SortByParam
@@ -25,14 +28,9 @@ class SearchViewModel(private val repository: SearchRepository) : ViewModel() {
         }
     }
 
-    var lastQuery = filter.query
     val results = repository.results
     val sortValueText = MutableLiveData<String>()
     val orderValueText = MutableLiveData<String>()
-
-    private val _emptyListReceived = MutableLiveData<Boolean>()
-    val emptyListReceived
-        get() = _emptyListReceived
 
     fun onSearchQueryChanged(query: String?) {
         filter.query = query ?: ""
@@ -51,10 +49,6 @@ class SearchViewModel(private val repository: SearchRepository) : ViewModel() {
     fun search(filter: SearchFilter) {
         if (filter.query.isNotBlank()) {
             fetchRepositories(filter)
-            lastQuery = filter.query
-            _emptyListReceived.value = false
-        } else {
-            _emptyListReceived.value = true
         }
     }
 
