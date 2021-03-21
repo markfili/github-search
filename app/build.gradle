@@ -55,6 +55,7 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.okhttp3:logging-interceptor:$retrofit_logging_version"
     implementation "com.github.bumptech.glide:glide:$glide_version"
+    implementation "com.miguelcatalan:materialsearchview:$search_view_version"
     kapt "com.github.bumptech.glide:compiler:$glide_version"
     testImplementation "junit:junit:$junit_version"
     androidTestImplementation "androidx.test.ext:junit:$junit_ext_version"

@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.coroutineScope
+import com.miguelcatalan.materialsearchview.MaterialSearchView
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -13,7 +14,7 @@ class SearchQueryChangeListener(
     private val lifecycle: Lifecycle,
     private val listener: OnSearchQueryChange
 ) :
-    SearchView.OnQueryTextListener {
+    MaterialSearchView.OnQueryTextListener {
     private var searchJob: Job? = null
     override fun onQueryTextSubmit(query: String?): Boolean {
         Log.i("SearchFragment", "Query submitted: $query")
