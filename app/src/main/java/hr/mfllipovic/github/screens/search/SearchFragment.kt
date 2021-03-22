@@ -1,6 +1,5 @@
 package hr.mfllipovic.github.screens.search
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,11 +14,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import hr.mfllipovic.github.R
 import hr.mfllipovic.github.databinding.SearchFragmentBinding
+import hr.mfllipovic.github.entities.Owner
 import hr.mfllipovic.github.entities.Repository
 import hr.mfllipovic.github.screens.search.results.OnRepositoryClickListener
 import hr.mfllipovic.github.screens.search.results.SearchResultsEpoxyController
 import hr.mfllipovic.github.screens.search.utils.OnSearchQueryChange
 import hr.mfllipovic.github.screens.search.utils.SearchQueryChangeListener
+import hr.mfllipovic.github.utils.launchInBrowser
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -58,7 +59,7 @@ class SearchFragment() : Fragment() {
                 it?.let {
                     searchResultsListController.setData(it.items)
                     _binding.searchResults = it
-                    (view?.parent as? ViewGroup)?.doOnPreDraw {
+                    (view.parent as? ViewGroup)?.doOnPreDraw {
                         startPostponedEnterTransition()
                     }
                 }
@@ -85,6 +86,10 @@ class SearchFragment() : Fragment() {
                 null,
                 extras
             )
+        }
+
+        override fun onOwnerImageClick(owner: Owner) {
+            launchInBrowser(requireContext(), owner.htmlUrl)
         }
     }
 }

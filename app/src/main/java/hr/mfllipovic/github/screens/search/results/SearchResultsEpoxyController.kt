@@ -2,6 +2,7 @@ package hr.mfllipovic.github.screens.search.results
 
 import android.widget.ImageView
 import com.airbnb.epoxy.TypedEpoxyController
+import hr.mfllipovic.github.entities.Owner
 import hr.mfllipovic.github.entities.Repository
 import hr.mfllipovic.github.item
 
@@ -31,4 +32,5 @@ class SearchResultsEpoxyController(private val onRepositoryClickListener: OnRepo
  */
 interface OnRepositoryClickListener {
     fun onRepositoryClick(imageView: ImageView, repository: Repository)
+    fun onOwnerImageClick(owner: Owner)
 }
