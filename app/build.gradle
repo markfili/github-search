@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -63,6 +64,8 @@ dependencies {
     kapt "com.airbnb.android:epoxy-processor:$epoxy_version"
     implementation "com.airbnb.android:epoxy-databinding:$epoxy_version"
     implementation "com.miguelcatalan:materialsearchview:$search_view_version"
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-compiler:$hilt_version"
     testImplementation "junit:junit:$junit_version"
     androidTestImplementation "androidx.test.ext:junit:$junit_ext_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_core_version"

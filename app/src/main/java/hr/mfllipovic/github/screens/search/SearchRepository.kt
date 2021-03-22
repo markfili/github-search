@@ -5,8 +5,9 @@ import hr.mfllipovic.github.entities.SearchFilter
 import hr.mfllipovic.github.entities.SearchResults
 import hr.mfllipovic.github.network.GitHubNetwork
 import hr.mfllipovic.github.network.errors.SearchRepositoriesError
+import javax.inject.Inject
 
-class SearchRepository(private val network: GitHubNetwork) {
+class SearchRepository @Inject constructor( var network: GitHubNetwork) {
 
     private val _results = MutableLiveData<SearchResults>()
 

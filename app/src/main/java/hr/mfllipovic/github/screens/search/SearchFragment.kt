@@ -1,5 +1,6 @@
 package hr.mfllipovic.github.screens.search
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,20 +12,26 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import hr.mfllipovic.github.R
 import hr.mfllipovic.github.databinding.SearchFragmentBinding
 import hr.mfllipovic.github.entities.Repository
-import hr.mfllipovic.github.network.getNetworkService
 import hr.mfllipovic.github.screens.search.results.OnRepositoryClickListener
 import hr.mfllipovic.github.screens.search.results.SearchResultsEpoxyController
 import hr.mfllipovic.github.screens.search.utils.OnSearchQueryChange
 import hr.mfllipovic.github.screens.search.utils.SearchQueryChangeListener
+import javax.inject.Inject
 
-class SearchFragment : Fragment() {
+@AndroidEntryPoint
+class SearchFragment() : Fragment() {
 
     private val searchResultsListController =
         SearchResultsEpoxyController(onRepositoryClickListener())
     private lateinit var _binding: SearchFragmentBinding
+
+    @Inject
+    lateinit var factory: SearchViewModel.SearchViewModelFactory
+    private val mViewModel: SearchViewModel by viewModels { factory }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,16 +51,8 @@ class SearchFragment : Fragment() {
             searchResultsList.layoutManager = LinearLayoutManager(context)
             searchResultsList.setController(searchResultsListController)
         }
-    }
-
-    private lateinit var mViewModel: SearchViewModel
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        val gitHubNetwork = getNetworkService()
-        val gitHubRepository = SearchRepository(gitHubNetwork)
-        val viewModelFactory = SearchViewModel.SearchViewModelFactory(gitHubRepository)
-        val viewModel: SearchViewModel by viewModels { viewModelFactory }
-        mViewModel = viewModel.apply {
+        setHasOptionsMenu(true)
+        mViewModel.apply {
             results.observe(viewLifecycleOwner) {
                 postponeEnterTransition()
                 it?.let {

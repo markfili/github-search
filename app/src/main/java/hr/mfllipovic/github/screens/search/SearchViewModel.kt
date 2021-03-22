@@ -6,13 +6,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import hr.mfllipovic.github.entities.OrderParam
 import hr.mfllipovic.github.entities.SearchFilter
 import hr.mfllipovic.github.entities.SortByParam
 import hr.mfllipovic.github.network.errors.SearchRepositoriesError
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SearchViewModel(private val repository: SearchRepository) : ViewModel() {
+@HiltViewModel
+class SearchViewModel @Inject constructor(var repository: SearchRepository) : ViewModel() {
     private val filter: SearchFilter
 
     init {
@@ -63,7 +66,7 @@ class SearchViewModel(private val repository: SearchRepository) : ViewModel() {
         }
     }
 
-    class SearchViewModelFactory(private val searchRepository: SearchRepository) :
+    class SearchViewModelFactory @Inject constructor(var searchRepository: SearchRepository) :
         ViewModelProvider.Factory {
 
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
