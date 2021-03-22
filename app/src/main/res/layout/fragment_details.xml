@@ -5,6 +5,10 @@
 
     <data>
 
+        <import type="hr.mfllipovic.github.utils.DateUtilKt" />
+
+        <import type="hr.mfllipovic.github.utils.IntentUtilKt" />
+
         <variable
             name="repository"
             type="hr.mfllipovic.github.entities.Repository" />
@@ -15,26 +19,153 @@
         android:layout_height="match_parent"
         tools:context=".screens.details.DetailsFragment">
 
+        <com.scwang.wave.MultiWaveHeader
+            android:id="@+id/waveHeader"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.25"
+            app:layout_constraintTop_toTopOf="parent"
+            app:mwhCloseColor="@color/design_default_color_primary"
+            app:mwhColorAlpha="0.45"
+            app:mwhGradientAngle="45"
+            app:mwhProgress="1"
+            app:mwhStartColor="@color/design_default_color_primary_dark"
+            app:mwhVelocity="1"
+            app:mwhWaveHeight="50dp"
+            app:mwhWaves="MultiWave" />
+
         <ImageView
             android:id="@+id/repository_owner_avatar_hero"
-            android:layout_width="140dp"
-            android:layout_height="140dp"
-            android:layout_marginTop="100dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:transitionName="owner_avatar_hero"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="w,1:1"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textView"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.12"
+            app:layout_constraintWidth_percent="0.33"
             app:networkCircularImgSrc="@{repository.owner.avatarUrl}" />
 
+        <com.mikepenz.iconics.view.IconicsTextView
+            android:id="@+id/repository_full_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="8dp"
+            android:text="@{`{oct-repo} ` + repository.fullName}"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/repository_owner_avatar_hero"
+            tools:text="sfinter/boobliesfinter/boobliesfinter/boobliesfinter/boobliesfinter/boobliesfinter/boobliesfinter/boobliesfinter/boobliesfinter/boobliesfinter/booblie" />
+
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/repository_language"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@{repository.language}"
+            android:textAlignment="center"
+            android:textSize="19sp"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/repository_full_name"
+            tools:text="Ruby" />
+
+        <com.google.android.flexbox.FlexboxLayout
+            android:id="@+id/repository_info_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{repository.fullName}"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="57dp"
-            tools:layout_editor_absoluteY="16dp" />
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            app:justifyContent="space_evenly"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/repository_language">
+
+            <com.mikepenz.iconics.view.IconicsTextView
+                android:id="@+id/repository_stargazers"
+                style="@style/details_repo_stats_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{`{oct-star} ` + repository.stargazersCount}"
+                tools:text="s 6234" />
+
+            <com.mikepenz.iconics.view.IconicsTextView
+                android:id="@+id/repository_watchers"
+                style="@style/details_repo_stats_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{`{oct-eye} ` + repository.watchersCount}"
+                tools:text="w 623224" />
+
+            <com.mikepenz.iconics.view.IconicsTextView
+                android:id="@+id/repository_forks"
+                style="@style/details_repo_stats_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{`{oct-git-branch} ` + repository.forksCount}"
+                tools:text="f 234" />
+
+            <com.mikepenz.iconics.view.IconicsTextView
+                android:id="@+id/repository_issues"
+                style="@style/details_repo_stats_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{`{oct-issue-opened} ` + repository.openIssuesCount}"
+                tools:text="i 33234" />
+        </com.google.android.flexbox.FlexboxLayout>
+
+        <com.google.android.flexbox.FlexboxLayout
+            android:id="@+id/repository_details_times"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:justifyContent="space_around"
+            app:layout_constraintTop_toBottomOf="@id/repository_info_view">
+
+            <com.mikepenz.iconics.view.IconicsTextView
+                android:id="@+id/repository_updated_at"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{`{oct-history} ` + DateUtilKt.toRelativeTimeSpan(context, repository.updatedAt)}" />
+
+            <com.mikepenz.iconics.view.IconicsTextView
+                android:id="@+id/repository_pushed_at"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{`{oct-repo-push} ` + DateUtilKt.toRelativeTimeSpan(context, repository.pushedAt)}" />
+        </com.google.android.flexbox.FlexboxLayout>
+
+        <com.google.android.flexbox.FlexboxLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:justifyContent="space_evenly"
+            app:layout_constraintTop_toBottomOf="@id/repository_details_times">
+
+            <com.mikepenz.iconics.view.IconicsButton
+                android:id="@+id/repository_details"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> IntentUtilKt.launchInBrowser(context, repository.url)}"
+                android:text="@{@string/repository_details_repo_button(`{oct-repo}`)}" />
+
+            <com.mikepenz.iconics.view.IconicsButton
+                android:id="@+id/repository_owner_details"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> IntentUtilKt.launchInBrowser(context, repository.owner.url)}"
+                android:text="@{@string/repository_details_owner_button(`{oct-person}`)}" />
+        </com.google.android.flexbox.FlexboxLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

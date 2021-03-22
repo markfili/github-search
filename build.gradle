@@ -22,6 +22,8 @@ buildscript {
     ext.hilt_version = "2.33-beta"
     ext.iconics_version = "5.2.8"
     ext.octicons_version = "11.1.0.0-kotlin@aar"
+    ext.flexbox_version = "2.0.0"
+    ext.wave_header_version = "1.0.0-alpha-1"
     repositories {
         google()
         jcenter()

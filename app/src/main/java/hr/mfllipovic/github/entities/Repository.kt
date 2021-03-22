@@ -12,5 +12,10 @@ data class Repository(
     @SerializedName("watchers_count") val watchersCount: Int,
     @SerializedName("forks_count") val forksCount: Int,
     @SerializedName("open_issues_count") val openIssuesCount: Int,
-    val owner: Owner
+    @SerializedName("updated_at") val updatedAt: String,
+    @SerializedName("pushed_at") val pushedAt: String,
+    val url: String,
+    val language: String,
+    val owner: Owner,
+
 ) : Parcelable

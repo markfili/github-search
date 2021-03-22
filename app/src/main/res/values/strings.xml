@@ -3,4 +3,6 @@
     <string name="search_title">Search</string>
 
     <string name="search_result_count">Showing results: %s out of %s</string>
+    <string name="repository_details_repo_button">%s Repo</string>
+    <string name="repository_details_owner_button">%s Owner</string>
 </resources>

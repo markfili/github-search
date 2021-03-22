@@ -52,7 +52,7 @@
                 android:layout_marginTop="8dp"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:text="@{repository.fullName}"
+                android:text="@{`{oct-repo} ` + repository.fullName}"
                 android:textColor="@color/black"
                 android:textSize="17sp"
                 android:textStyle="bold"
@@ -76,7 +76,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@{`{oct-star} ` + repository.stargazersCount}"
-                    android:textAlignment="center"
                     tools:text="s 6234" />
 
                 <com.mikepenz.iconics.view.IconicsTextView
@@ -95,7 +94,7 @@
 
                 <com.mikepenz.iconics.view.IconicsTextView
                     android:id="@+id/repository_issues"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@{`{oct-issue-opened} ` + repository.openIssuesCount}"
                     tools:text="i 33234" />
