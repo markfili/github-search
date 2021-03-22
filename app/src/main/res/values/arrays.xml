@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="sort_options">
+        <item>match</item>
+        <item>stars</item>
+        <item>forks</item>
+        <item>updated</item>
+    </string-array>
+    <string-array name="order_options">
+        <item>original</item>
+        <item>asc</item>
+        <item>desc</item>
+    </string-array>
+</resources>

@@ -11,6 +11,10 @@
         <variable
             name="searchResults"
             type="hr.mfllipovic.github.entities.SearchResults" />
+
+        <variable
+            name="loader"
+            type="Boolean" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,15 +22,22 @@
         android:layout_height="match_parent"
         tools:context=".screens.search.SearchFragment">
 
-        <LinearLayout
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:visibility="@{loader ? View.VISIBLE : View.GONE}"
+            app:layout_constraintTop_toBottomOf="@id/toolbar_container" />
+
+        <com.google.android.flexbox.FlexboxLayout
             android:id="@+id/search_results_info_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="8dp"
             android:visibility="@{searchResults.items.size() > 0 ? View.VISIBLE : View.GONE }"
+            app:justifyContent="space_evenly"
             app:layout_constraintTop_toBottomOf="@id/toolbar_container"
-            tools:visibility="visible">
+            tools:visibility="invisible">
 
             <TextView
                 android:id="@+id/search_result_count_label"
@@ -34,21 +45,41 @@
                 android:layout_height="wrap_content"
                 android:text="@{@string/search_result_count(searchResults.items.size(), searchResults.totalCount)}" />
 
-            <TextView
-                android:id="@+id/search_result_count_value"
+            <Spinner
+                android:id="@+id/sort_spinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text='' />
-        </LinearLayout>
+                android:entries="@array/sort_options" />
+
+            <Spinner
+                android:id="@+id/order_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:entries="@array/order_options" />
+        </com.google.android.flexbox.FlexboxLayout>
 
         <com.airbnb.epoxy.EpoxyRecyclerView
             android:id="@+id/search_results_list"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:visibility="@{searchResults.items.size() > 0 ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/search_results_info_view"
             tools:itemCount="5"
-            tools:listitem="@layout/search_result_item" />
+            tools:listitem="@layout/search_result_item"
+            tools:visibility="invisible" />
+
+        <com.mikepenz.iconics.view.IconicsTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{@string/search_results_empty(`{oct-beaker}`)}"
+            android:visibility="@{searchResults == null || searchResults.items.isEmpty() ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5" />
 
         <FrameLayout
             android:id="@+id/toolbar_container"

@@ -34,6 +34,7 @@ class SearchViewModel @Inject constructor(var repository: SearchRepository) : Vi
     val results = repository.results
     val sortValueText = MutableLiveData<String>()
     val orderValueText = MutableLiveData<String>()
+    val loader = MutableLiveData(false)
 
     fun onSearchQueryChanged(query: String?) {
         filter.query = query ?: ""
@@ -50,18 +51,19 @@ class SearchViewModel @Inject constructor(var repository: SearchRepository) : Vi
     }
 
     fun search(filter: SearchFilter) {
-        if (filter.query.isNotBlank()) {
-            fetchRepositories(filter)
-        }
+        fetchRepositories(filter)
     }
 
     private fun fetchRepositories(filter: SearchFilter) {
         viewModelScope.launch {
             try {
+                loader.value = true
                 repository.searchRepositories(filter)
             } catch (error: SearchRepositoriesError) {
                 error.printStackTrace()
                 Log.e("SearchViewModel", error.message!!)
+            } finally {
+                loader.value = false
             }
         }
     }

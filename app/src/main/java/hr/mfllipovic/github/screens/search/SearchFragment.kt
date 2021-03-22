@@ -1,9 +1,11 @@
 package hr.mfllipovic.github.screens.search
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ImageView
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
@@ -14,8 +16,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import hr.mfllipovic.github.R
 import hr.mfllipovic.github.databinding.SearchFragmentBinding
+import hr.mfllipovic.github.entities.OrderParam
 import hr.mfllipovic.github.entities.Owner
 import hr.mfllipovic.github.entities.Repository
+import hr.mfllipovic.github.entities.SortByParam
 import hr.mfllipovic.github.screens.search.results.OnRepositoryClickListener
 import hr.mfllipovic.github.screens.search.results.SearchResultsEpoxyController
 import hr.mfllipovic.github.screens.search.utils.OnSearchQueryChange
@@ -51,6 +55,8 @@ class SearchFragment() : Fragment() {
             searchView.setMenuItem(toolbar.menu.findItem(R.id.action_search))
             searchResultsList.layoutManager = LinearLayoutManager(context)
             searchResultsList.setController(searchResultsListController)
+            sortSpinner.onItemSelectedListener = onSortItemSelectedListener()
+            orderSpinner.onItemSelectedListener = onOrderItemSelectedListener()
         }
         setHasOptionsMenu(true)
         mViewModel.apply {
@@ -64,6 +70,53 @@ class SearchFragment() : Fragment() {
                     }
                 }
             }
+            loader.observe(viewLifecycleOwner) {
+                _binding.loader = it
+            }
+        }
+    }
+
+    private fun onSortItemSelectedListener() = object : AdapterView.OnItemSelectedListener {
+        override fun onItemSelected(
+            parent: AdapterView<*>?,
+            view: View?,
+            position: Int,
+            id: Long
+        ) {
+            mViewModel.onSortByChanged(
+                SortByParam.valueOf(
+                    parent?.getItemAtPosition(
+                        position
+                    ) as String
+                )
+            )
+        }
+
+        override fun onNothingSelected(parent: AdapterView<*>?) {
+            mViewModel.onSortByChanged(SortByParam.match)
+        }
+    }
+
+    private fun onOrderItemSelectedListener() = object : AdapterView.OnItemSelectedListener {
+        override fun onItemSelected(
+            parent: AdapterView<*>?,
+            view: View?,
+            position: Int,
+            id: Long
+        ) {
+            val value = parent?.getItemAtPosition(
+                position
+            ) as String
+            Log.i("Spinner", value)
+            mViewModel.onOrderChanged(
+                OrderParam.valueOf(
+                    value
+                )
+            )
+        }
+
+        override fun onNothingSelected(parent: AdapterView<*>?) {
+            mViewModel.onOrderChanged(OrderParam.original)
         }
     }
 

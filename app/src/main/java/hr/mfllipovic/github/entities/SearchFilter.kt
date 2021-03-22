@@ -5,14 +5,14 @@ import androidx.databinding.Bindable
 import hr.mfllipovic.github.BR
 
 enum class SortByParam {
-    none,
+    match,
     stars,
     forks,
     updated
 }
 
 enum class OrderParam {
-    none,
+    original,
     asc,
     desc
 }
@@ -26,14 +26,14 @@ class SearchFilter : BaseObservable() {
         }
 
     @get:Bindable
-    var sort: SortByParam = SortByParam.none
+    var sort: SortByParam = SortByParam.match
         set(value) {
             field = value
             notifyPropertyChanged(BR.sort)
         }
 
     @get:Bindable
-    var order: OrderParam = OrderParam.none
+    var order: OrderParam = OrderParam.original
         set(value) {
             field = value
             notifyPropertyChanged(BR.order)
@@ -43,8 +43,8 @@ class SearchFilter : BaseObservable() {
         val map = mutableMapOf(
             "q" to query
         )
-        if (sort != SortByParam.none) map["sort"] = sort.name
-        if (order != OrderParam.none) map["order"] = order.name
+        if (sort != SortByParam.match) map["sort"] = sort.name
+        if (order != OrderParam.original) map["order"] = order.name
         return map
     }
 
